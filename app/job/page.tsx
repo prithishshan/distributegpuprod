@@ -5,6 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { WorkerRenderer } from "@/app/components/WorkerRenderer";
 import { Scene } from "@/shaders/Scene";
 
+// if (typeof Float16Array === 'undefined') {
+//   (globalThis as any).Float16Array = Uint16Array;
+// }
+
 export default function JobPage() {
   const [taskId, setTaskId] = useState("");
   const [status, setStatus] = useState("idle");
@@ -28,32 +32,6 @@ export default function JobPage() {
 
       const renderer = new WorkerRenderer(device);
       rendererRef.current = renderer;
-
-      // 1. Fetch Task Info (to get Scene URLs)
-      // Since we don't have a specific endpoint for task details, we might need to assume 
-      // the first job we pull gives us some context, or we create a GET /api/tasks/[id] endpoint.
-      // BUT, the user said "queries the api/jobs/next endpoint... then set camera params".
-      // The `next` job endpoint returns the job, but we need the Scene URL from somewhere.
-      // Wait, the API `GET /api/jobs/next` returns a `job`.
-      // Does it return the task details?
-      // I only selected columns from `jobs`.
-      // I should update `GET /api/jobs/next` to JOIN with tasks or return task params.
-      // OR, fetches task details separately?
-
-      // Let's assume for now we need to fetch task info. 
-      // I'll assume the user might have task info or I can fetch it.
-      // Let's UPDATE the `GET /api/jobs/next` to include task details (scene URL, cam params) in the response!
-      // This is efficient.
-
-      // For now, let's just implement the loop and expect `job` to contain what we need
-      // or fetch it once.
-
-      // Since I can't easily change the API in this step without a tool call, 
-      // I will assume I can fetch the task info from `/api/tasks?id=...` if it existed,
-      // or better, I will MODIFY the `GET /api/jobs/next` endpoint in the NEXT Step to return task info.
-
-      // BUT user asked me to do it "Make it so app/jobs/page.tsx queries api/jobs/next...".
-      // I'll write the code to expect `job.task` or similar.
 
       setStatus("running");
       processNextJob();
@@ -92,18 +70,11 @@ export default function JobPage() {
       });
 
       if (!startRes.ok) {
-        addLog("Failed to claim job.");
-        setTimeout(processNextJob, 1000);
+        addLog("Failed to claim job (locked). Retrying...");
+        processNextJob();
         return;
       }
 
-      // We need Task Details to render! 
-      // Currently `job` has `x, y, width, height`.
-      // We need scene URLs and camera params.
-      // I'll fetch them from a hypothetical `task` object attached to the job
-      // OR I'll fetch `/api/jobs/next` which I should Update to include Task data.
-
-      // I will assume `job` has the task data merged or available.
       // I'll implement `processJob(rendererRef.current!, job)`
 
       await processJob(rendererRef.current!, job);
@@ -116,10 +87,6 @@ export default function JobPage() {
 
   const processJob = async (renderer: WorkerRenderer, job: any) => {
     // Initialize scene if not loaded
-    // We need task info!
-    // NOTE: I really need to update the API to return task info.
-    // I will add a TODO here and handle it.
-
     // The API returns a flat object with task fields joined
     const task = {
       scene_mesh_url: job.scene_mesh_url,
@@ -146,7 +113,7 @@ export default function JobPage() {
 
     addLog(`Rendering tile ${job.x},${job.y} (${job.width}x${job.height})...`);
     // Pass the task object which now has the correct params
-    const pixelData = await renderer.renderTile(job, task, 10); // 10 samples
+    const pixelData = await renderer.renderTile(job, task, 50); 
 
     // Debug: Check if we have any non-zero pixels
     let nonZero = 0;
