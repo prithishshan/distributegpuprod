@@ -116,13 +116,36 @@ export default function TaskPreview({ taskId }: TaskPreviewProps) {
 
     }, [jobs, taskDims]);
 
+    const handleDownload = () => {
+        if (!canvasRef.current) return;
+        try {
+            const link = document.createElement('a');
+            link.download = `render-${taskId}-${new Date().toISOString().replace(/[:.]/g, '-')}.png`;
+            link.href = canvasRef.current.toDataURL("image/png");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (e) {
+            console.error("Download failed", e);
+        }
+    };
+
     if (!taskId) return null;
 
     return (
         <div className="task-preview mt-8 p-4 bg-gray-900 rounded-lg border border-gray-700">
             <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold text-white">Live Render Preview</h3>
-                <span className="text-xs text-gray-400">Last updated: {lastUpdated.toLocaleTimeString()}</span>
+                <div className="flex items-center gap-3">
+                    <span className="text-xs text-gray-400">Last updated: {lastUpdated.toLocaleTimeString()}</span>
+                    <button
+                        onClick={handleDownload}
+                        className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-sm transition-colors"
+                        title="Download Render"
+                    >
+                        Download
+                    </button>
+                </div>
             </div>
 
             <div className="overflow-auto bg-black rounded border border-gray-800 flex justify-center">
