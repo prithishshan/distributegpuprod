@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { WorkerRenderer } from "@/app/components/WorkerRenderer";
+import { Scene } from "@/shaders/Scene";
 
 export default function JobPage() {
   const [taskId, setTaskId] = useState("");
@@ -119,21 +120,40 @@ export default function JobPage() {
     // NOTE: I really need to update the API to return task info.
     // I will add a TODO here and handle it.
 
-    const task = job.task_details || {
-      // Fallback or error if missing
-      scene_mesh_url: 'raytraced-scene.obj', // Default for now
-      scene_bvh_url: '',
-      scene_textures_url: '',
-      // ... defaults
+    // The API returns a flat object with task fields joined
+    const task = {
+      scene_mesh_url: job.scene_mesh_url,
+      scene_bvh_url: job.scene_bvh_url,
+      scene_textures_url: job.scene_textures_url,
+      cam_position_x: job.cam_position_x,
+      cam_position_y: job.cam_position_y,
+      cam_position_z: job.cam_position_z,
+      cam_target_x: job.cam_target_x,
+      cam_target_y: job.cam_target_y,
+      cam_target_z: job.cam_target_z,
+      fov: job.fov,
+      width: job.task_width, // Note: Aliased in query
+      height: job.task_height, // Note: Aliased in query
+      max_bounces: job.max_bounces
     };
 
-    if (!renderer.scene.MODELS_COUNT) {
-      addLog("Loading scene...");
-      await renderer.init(task.scene_mesh_url, task.scene_mesh_url.replace('.obj', '.mtl'));
+    if (Scene.MODELS_COUNT) {
+      addLog(`Loading scene from ${task.scene_mesh_url}...`);
+      // We might want to use the passed URLs directly if they are usually presigned or public
+      // But here we are passing them to init
+      await renderer.init(task.scene_mesh_url, task.scene_textures_url || task.scene_mesh_url.replace('.obj', '.mtl'));
     }
 
-    addLog("Rendering...");
+    addLog(`Rendering tile ${job.x},${job.y} (${job.width}x${job.height})...`);
+    // Pass the task object which now has the correct params
     const pixelData = await renderer.renderTile(job, task, 10); // 10 samples
+
+    // Debug: Check if we have any non-zero pixels
+    let nonZero = 0;
+    for (let i = 0; i < pixelData.length; i += 4) {
+      if (pixelData[i] > 0 || pixelData[i + 1] > 0 || pixelData[i + 2] > 0) nonZero++;
+    }
+    addLog(`Rendered. Non-black pixels: ${nonZero} / ${pixelData.length / 4}`);
 
     // Convert to Base64
     // Use Buffer if available or manual conversion

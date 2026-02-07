@@ -39,7 +39,7 @@ export default wgsl/* wgsl */ `
 
   @compute @workgroup_size(WORKGROUP_SIZE_X, WORKGROUP_SIZE_Y)
   fn main(@builtin(global_invocation_id) globalInvocationId : vec3<u32>,) {
-    if (any(globalInvocationId.xy > cameraUniforms.viewportSize)) {
+    if (any(globalInvocationId.xy >= cameraUniforms.viewportSize)) {
       return;
     }
 

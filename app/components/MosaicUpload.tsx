@@ -7,7 +7,11 @@ import { useRouter } from "next/navigation";
 
 const ModelViewer = dynamic(() => import("./ModelViewer"), { ssr: false });
 
-export default function MosaicUpload() {
+interface MosaicUploadProps {
+  onTaskCreated?: (taskId: string) => void;
+}
+
+export default function MosaicUpload({ onTaskCreated }: MosaicUploadProps) {
   const router = useRouter();
   const [objFile, setObjFile] = useState<File | null>(null);
   const [mtlFile, setMtlFile] = useState<File | null>(null);
@@ -91,8 +95,8 @@ export default function MosaicUpload() {
           scene_bvh_url: '', // Not used yet? Or maybe generated?
           cam_position_x: 0, cam_position_y: 5, cam_position_z: 10, // Defualts
           cam_target_x: 0, cam_target_y: 0, cam_target_z: 0,
-          width: 1920, // Default canvas size
-          height: 1080,
+          width: 1000,
+          height: 1000,
           fov: 45,
           max_bounces: 3,
           // We should probably allow the user to set these in the UI, 
@@ -104,6 +108,10 @@ export default function MosaicUpload() {
 
       const data = await taskRes.json();
       alert(`Task Created! ID: ${data.taskId}`);
+
+      if (onTaskCreated) {
+        onTaskCreated(data.taskId);
+      }
 
       // Redirect or clear
       // router.push('/job'); // Maybe?

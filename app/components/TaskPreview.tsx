@@ -1,0 +1,146 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+interface Job {
+    id: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    status: string;
+    result_data?: string; // base64
+}
+
+interface TaskPreviewProps {
+    taskId: string;
+}
+
+export default function TaskPreview({ taskId }: TaskPreviewProps) {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [jobs, setJobs] = useState<Job[]>([]);
+    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+    const [taskDims, setTaskDims] = useState({ width: 0, height: 0 });
+
+    // Poll for updates
+    useEffect(() => {
+        if (!taskId) return;
+
+        let isMounted = true;
+        const fetchJobs = async () => {
+            try {
+                const res = await fetch(`/api/jobs/all?taskId=${taskId}`);
+                if (!res.ok) return;
+                const data = await res.json();
+
+                if (isMounted && data.jobs) {
+                    setJobs(data.jobs);
+                    setLastUpdated(new Date());
+
+                    // Try to infer dimensions if not set (or we could fetch task details)
+                    // For now, looking at the jobs can give us max bounds
+                    if (data.jobs.length > 0) {
+                        let maxX = 0;
+                        let maxY = 0;
+                        data.jobs.forEach((j: Job) => {
+                            maxX = Math.max(maxX, j.x + j.width);
+                            maxY = Math.max(maxY, j.y + j.height);
+                        });
+                        setTaskDims(prev => {
+                            if (Math.abs(prev.width - maxX) > 1 || Math.abs(prev.height - maxY) > 1) {
+                                return { width: maxX, height: maxY };
+                            }
+                            return prev;
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error("Poll error", err);
+            }
+        };
+
+        fetchJobs(); // Initial
+        const interval = setInterval(fetchJobs, 3000);
+
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+        };
+    }, [taskId]);
+
+    // Render to Canvas
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas || taskDims.width === 0) return;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        // Clear only if needed, but we mostly overdraw
+        // ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        jobs.forEach(job => {
+            if (job.status === "completed" && job.result_data) {
+                try {
+                    // Decode Base64 to binary string
+                    const binaryString = atob(job.result_data);
+                    const len = binaryString.length;
+                    const bytes = new Uint8Array(len);
+                    for (let i = 0; i < len; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+
+                    // Create ImageData
+                    // Assuming RGBA (4 channels)
+                    // If the buffer size doesn't match width*height*4, we might have an issue
+                    // But let's try.
+                    const expectedSize = job.width * job.height * 4;
+                    if (bytes.length !== expectedSize) {
+                        console.warn(`Job ${job.id} data mismatch. Expected ${expectedSize}, got ${bytes.length}`);
+                        return;
+                    }
+
+                    const imageData = new ImageData(new Uint8ClampedArray(bytes.buffer), job.width, job.height);
+                    ctx.putImageData(imageData, job.x, job.y);
+
+                    // Draw a border for debugging? No, let's keep it clean.
+                } catch (e) {
+                    console.error("Error drawing job", job.id, e);
+                }
+            } else if (job.status === "started") {
+                // Draw a yellow box or something to show it's working?
+                ctx.fillStyle = "rgba(255, 255, 0, 0.1)";
+                ctx.fillRect(job.x, job.y, job.width, job.height);
+            }
+        });
+
+    }, [jobs, taskDims]);
+
+    if (!taskId) return null;
+
+    return (
+        <div className="task-preview mt-8 p-4 bg-gray-900 rounded-lg border border-gray-700">
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-bold text-white">Live Render Preview</h3>
+                <span className="text-xs text-gray-400">Last updated: {lastUpdated.toLocaleTimeString()}</span>
+            </div>
+
+            <div className="overflow-auto bg-black rounded border border-gray-800 flex justify-center">
+                {taskDims.width > 0 ? (
+                    <canvas
+                        ref={canvasRef}
+                        width={taskDims.width}
+                        height={taskDims.height}
+                        className="max-w-full h-auto"
+                        style={{ imageRendering: 'pixelated' }}
+                    />
+                ) : (
+                    <div className="p-8 text-gray-500">Waiting for job data...</div>
+                )}
+            </div>
+            <div className="mt-2 text-sm text-gray-400">
+                Completed: {jobs.filter(j => j.status === 'completed').length} / {jobs.length} tiles
+            </div>
+        </div>
+    );
+}

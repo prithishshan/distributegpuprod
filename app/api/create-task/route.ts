@@ -4,10 +4,11 @@ import pool from '@/lib/db';
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
+        console.log(body);
         const {
             scene_mesh_url,
-            scene_bvh_url,
-            scene_textures_url,
+            scene_bvh_url = "",
+            scene_textures_url = "",
             cam_position_x,
             cam_position_y,
             cam_position_z,
@@ -58,7 +59,7 @@ export async function POST(req: NextRequest) {
             const taskId = taskResult.rows[0].id;
 
             // 2. Generate Jobs (Tile based)
-            const TILE_SIZE = 10;
+            const TILE_SIZE = 100;
             const jobs = [];
 
             for (let y = 0; y < height; y += TILE_SIZE) {
@@ -71,21 +72,28 @@ export async function POST(req: NextRequest) {
 
             // Bulk insert jobs could be optimized, but using a loop for simplicity or constructing a large VALUES string
             // For proper bulk insert with pg, we construct the query dynamically
-            if (jobs.length > 0) {
+            // Batch insert jobs to strictly avoid the PostgreSQL parameter limit (65535)
+            // Each job has 6 parameters. 20,000 jobs * 6 = 120,000 params > 65,535.
+            // Safe limit per batch: ~10,000 parameters.
+            // Let's use a batch size of 1000 jobs (6000 params).
+
+            const BATCH_SIZE = 1000;
+            for (let i = 0; i < jobs.length; i += BATCH_SIZE) {
+                const batch = jobs.slice(i, i + BATCH_SIZE);
                 let placeholders = [];
                 let values = [];
                 let counter = 1;
 
-                for (const job of jobs) {
+                for (const job of batch) {
                     placeholders.push(`($${counter}, $${counter + 1}, $${counter + 2}, $${counter + 3}, $${counter + 4}, $${counter + 5})`);
                     values.push(...job);
                     counter += 6;
                 }
 
                 const insertJobsQuery = `
-          INSERT INTO jobs (task_id, x, y, width, height, status)
-          VALUES ${placeholders.join(', ')}
-        `;
+                  INSERT INTO jobs (task_id, x, y, width, height, status)
+                  VALUES ${placeholders.join(', ')}
+                `;
 
                 await client.query(insertJobsQuery, values);
             }

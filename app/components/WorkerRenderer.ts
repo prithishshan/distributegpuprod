@@ -223,18 +223,21 @@ export class WorkerRenderer {
         const copyArrayBuffer = readBuffer.getMappedRange();
         const data = new Float32Array(copyArrayBuffer);
 
-        // Convert Float32 RGB to Uint8 RGB (skip padding w)
+        // Convert Float32 RGB to Uint8 RGBA (add alpha)
         // WGSL array<vec3f> has stride 16 (r, g, b, padding).
-        const output = new Uint8Array(tileW * tileH * 3);
+        // Web canvas ImageData requires 4 bytes per pixel (RGBA).
+        const output = new Uint8Array(tileW * tileH * 4);
         let ptr = 0;
         for (let i = 0; i < tileW * tileH; i++) {
             // Basic gamma correction (sqrt) + scaling
             let r = Math.sqrt(data[i * 4 + 0]) * 255;
             let g = Math.sqrt(data[i * 4 + 1]) * 255;
             let b = Math.sqrt(data[i * 4 + 2]) * 255;
+
             output[ptr++] = Math.min(255, Math.max(0, r));
             output[ptr++] = Math.min(255, Math.max(0, g));
             output[ptr++] = Math.min(255, Math.max(0, b));
+            output[ptr++] = 255; // Alpha
         }
 
         readBuffer.unmap();

@@ -30,7 +30,48 @@ export async function GET(req: NextRequest) {
                 return NextResponse.json({ message: 'No available jobs' }, { status: 404 });
             }
 
-            return NextResponse.json({ job: result.rows[0] });
+            const job = result.rows[0];
+
+            // Sign the S3 URLs to ensure worker can access them
+            try {
+                if (process.env.AWS_ACCESS_KEY && process.env.AWS_SECRET_KEY) {
+                    const { S3Client, GetObjectCommand } = await import('@aws-sdk/client-s3');
+                    const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
+
+                    const s3Client = new S3Client({
+                        region: process.env.AWS_REGION || 'us-east-1',
+                        credentials: {
+                            accessKeyId: process.env.AWS_ACCESS_KEY,
+                            secretAccessKey: process.env.AWS_SECRET_KEY,
+                        },
+                    });
+
+                    const signUrl = async (url: string) => {
+                        if (!url || !url.includes('.amazonaws.com/')) return url;
+                        // Extract Key: https://bucket.s3.amazonaws.com/uploads/key
+                        const parts = url.split('.amazonaws.com/');
+                        if (parts.length < 2) return url;
+                        const key = parts[1];
+
+                        const command = new GetObjectCommand({
+                            Bucket: process.env.S3_BUCKET_NAME,
+                            Key: key,
+                        });
+                        return await getSignedUrl(s3Client, command, { expiresIn: 3600 });
+                    };
+                    job.scene_mesh_url = await signUrl(job.scene_mesh_url);
+                    job.scene_textures_url = await signUrl(job.scene_textures_url);
+                    job.scene_bvh_url = await signUrl(job.scene_bvh_url);
+                    console.log(job.scene_mesh_url);
+                    console.log(job.scene_textures_url);
+                    console.log(job.scene_bvh_url);
+                }
+            } catch (e) {
+                console.error("Failed to sign URLs", e);
+                // Fallback to original URLs
+            }
+
+            return NextResponse.json({ job });
 
         } finally {
             client.release();
