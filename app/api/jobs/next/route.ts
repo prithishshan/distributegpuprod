@@ -34,15 +34,15 @@ export async function GET(req: NextRequest) {
 
             // Sign the S3 URLs to ensure worker can access them
             try {
-                if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+                if (process.env.AWS_ACCESS_KEY && process.env.AWS_SECRET_KEY) {
                     const { S3Client, GetObjectCommand } = await import('@aws-sdk/client-s3');
                     const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner');
 
                     const s3Client = new S3Client({
                         region: process.env.AWS_REGION || 'us-east-1',
                         credentials: {
-                            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-                            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+                            accessKeyId: process.env.AWS_ACCESS_KEY,
+                            secretAccessKey: process.env.AWS_SECRET_KEY,
                         },
                     });
 
