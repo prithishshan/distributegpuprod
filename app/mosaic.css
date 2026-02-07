@@ -1,14 +1,24 @@
-/* Mosaic UI — tiled, geometric layout */
+/* Mosaic UI — tiled, geometric layout (Glassmorphism / Light Theme Edition) */
 
 /* Landing (entry) page */
 .landing-root {
-  --mosaic-bg: #0d0d12;
-  --mosaic-tile-bg: #1c1c28;
-  --mosaic-border: #2a2a3e;
-  --mosaic-accent: #7c3aed;
-  --mosaic-text: #e2e8f0;
-  --mosaic-muted: #94a3b8;
+  /* Redefine variables for Light + Glass + Subtle Rainbow */
+  --mosaic-bg: transparent;
+  /* Let global rainbow mesh show through */
+  --mosaic-tile-bg: rgba(255, 255, 255, 0.4);
+  /* Glassy white */
+  --mosaic-border: rgba(255, 255, 255, 0.6);
+  /* Subtle white border */
+
+  /* Accent: A vibrant but controlled violet/indigo gradient */
+  --mosaic-accent: #8b5cf6;
+  --mosaic-text: #0f172a;
+  /* Slate 900 */
+  --mosaic-muted: #64748b;
+  /* Slate 500 */
   --mosaic-highlight: #a78bfa;
+  /* Lighter violet */
+
   min-height: 100vh;
   background: var(--mosaic-bg);
   color: var(--mosaic-text);
@@ -25,7 +35,8 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0 0 8px;
-  background: linear-gradient(135deg, var(--mosaic-text), var(--mosaic-highlight));
+  /* Rainbow gradient text for title */
+  background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -53,23 +64,31 @@
   min-width: 200px;
   min-height: 140px;
   padding: 28px 32px;
+
+  /* Glassmorphism */
   background: var(--mosaic-tile-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--mosaic-border);
-  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+
+  border-radius: 12px;
   text-decoration: none;
   color: var(--mosaic-text);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
 }
 
 .landing-card:hover {
   border-color: var(--mosaic-accent);
-  box-shadow: 0 0 0 1px var(--mosaic-accent);
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.15), 0 4px 6px -2px rgba(139, 92, 246, 0.1);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.6);
 }
 
 .landing-card-label {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--mosaic-highlight);
+  color: var(--mosaic-accent);
   margin-bottom: 8px;
 }
 
@@ -81,8 +100,8 @@
 
 /* Back link (design + job pages) — uses vars from :root below */
 .mosaic-back-link {
-  --mosaic-muted: #94a3b8;
-  --mosaic-highlight: #a78bfa;
+  --mosaic-muted: #64748b;
+  --mosaic-highlight: #8b5cf6;
   position: fixed;
   top: 16px;
   left: 16px;
@@ -93,26 +112,36 @@
   color: var(--mosaic-muted);
   text-decoration: none;
   font-size: 0.9rem;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(4px);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.2s;
 }
 
 .mosaic-back-link a:hover {
   color: var(--mosaic-highlight);
+  background: rgba(255, 255, 255, 0.8);
 }
 
-/* Design page wrapper (so back link has dark bg) */
+/* Design page wrapper */
 .design-page-wrap {
-  background: #0d0d12;
+  background: transparent;
+  /* Allow global bg */
 }
 
 /* Job page */
 .job-page {
-  --mosaic-bg: #0d0d12;
-  --mosaic-tile-bg: #1c1c28;
-  --mosaic-border: #2a2a3e;
-  --mosaic-accent: #7c3aed;
-  --mosaic-text: #e2e8f0;
-  --mosaic-muted: #94a3b8;
+  /* Copy vars from landing root for consistency */
+  --mosaic-bg: transparent;
+  --mosaic-tile-bg: rgba(255, 255, 255, 0.4);
+  --mosaic-border: rgba(255, 255, 255, 0.6);
+  --mosaic-accent: #8b5cf6;
+  --mosaic-text: #0f172a;
+  --mosaic-muted: #64748b;
   --mosaic-highlight: #a78bfa;
+
   background: var(--mosaic-bg);
   color: var(--mosaic-text);
   font-family: system-ui, -apple-system, sans-serif;
@@ -140,15 +169,18 @@
   font-size: 1rem;
   font-weight: 600;
   color: white;
-  background: var(--mosaic-accent);
+  background: linear-gradient(135deg, #8b5cf6, #ec4899);
+  /* Gradient button */
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.3);
 }
 
 .job-start-btn:hover {
-  background: var(--mosaic-highlight);
+  opacity: 0.9;
+  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
 }
 
 .job-start-btn:active {
@@ -156,15 +188,17 @@
 }
 
 .mosaic-root {
-  --mosaic-bg: #0d0d12;
-  --mosaic-surface: #16161e;
-  --mosaic-tile-bg: #1c1c28;
-  --mosaic-border: #2a2a3e;
-  --mosaic-accent: #7c3aed;
-  --mosaic-accent-dim: #5b21b6;
-  --mosaic-text: #e2e8f0;
-  --mosaic-muted: #94a3b8;
+  --mosaic-bg: transparent;
+  --mosaic-surface: rgba(255, 255, 255, 0.5);
+  /* Semi-transparent surface */
+  --mosaic-tile-bg: rgba(255, 255, 255, 0.4);
+  --mosaic-border: rgba(255, 255, 255, 0.6);
+  --mosaic-accent: #8b5cf6;
+  --mosaic-accent-dim: #7c3aed;
+  --mosaic-text: #0f172a;
+  --mosaic-muted: #64748b;
   --mosaic-highlight: #a78bfa;
+
   min-height: 100vh;
   background: var(--mosaic-bg);
   color: var(--mosaic-text);
@@ -176,7 +210,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto auto 1fr;
-  gap: 12px;
+  gap: 16px;
+  /* Increased gap slightly for glass look */
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -203,11 +238,15 @@
 
 .mosaic-tile {
   background: var(--mosaic-tile-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--mosaic-border);
-  border-radius: 4px;
-  padding: 16px;
+  border-radius: 12px;
+  /* Softer corners */
+  padding: 20px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .mosaic-tile::before {
@@ -216,20 +255,23 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--mosaic-accent),
-    transparent
-  );
-  opacity: 0.6;
+  height: 3px;
+  background: linear-gradient(90deg,
+      transparent,
+      var(--mosaic-accent),
+      #ec4899,
+      transparent);
+  opacity: 0.8;
 }
 
 .mosaic-tile-header {
   grid-column: 1 / -1;
   text-align: center;
   padding: 24px 16px;
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  box-shadow: none;
 }
 
 @media (min-width: 900px) {
@@ -243,7 +285,7 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0;
-  background: linear-gradient(135deg, var(--mosaic-text), var(--mosaic-highlight));
+  background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -261,11 +303,12 @@
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--mosaic-muted);
-  margin: 0 0 12px;
+  margin: 0 0 16px;
+  font-weight: 600;
 }
 
 .mosaic-input-group {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .mosaic-input-group:last-child {
@@ -297,20 +340,22 @@
 }
 
 .mosaic-file-name {
-  padding: 6px 10px;
-  background: var(--mosaic-surface);
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.5);
   border: 1px solid var(--mosaic-border);
-  border-radius: 4px;
-  color: var(--mosaic-muted);
-  font-size: 0.8rem;
+  border-radius: 6px;
+  color: var(--mosaic-text);
+  font-size: 0.85rem;
   flex: 1;
   min-width: 0;
+  transition: border-color 0.2s;
 }
 
-.mosaic-label:has(.mosaic-file-input:focus) + .mosaic-file-name,
-.mosaic-file-input:focus + .mosaic-file-name {
+.mosaic-label:has(.mosaic-file-input:focus)+.mosaic-file-name,
+.mosaic-file-input:focus+.mosaic-file-name {
   border-color: var(--mosaic-accent);
   outline: none;
+  background: rgba(255, 255, 255, 0.8);
 }
 
 .mosaic-optional .mosaic-label span:first-child {
@@ -323,51 +368,54 @@
 
 .mosaic-slider {
   width: 100%;
-  height: 8px;
+  height: 6px;
   -webkit-appearance: none;
   appearance: none;
-  background: var(--mosaic-surface);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   outline: none;
 }
 
 .mosaic-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--mosaic-accent);
   cursor: pointer;
-  border: 2px solid var(--mosaic-tile-bg);
-  box-shadow: 0 0 0 1px var(--mosaic-border);
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .mosaic-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--mosaic-accent);
   cursor: pointer;
-  border: 2px solid var(--mosaic-tile-bg);
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .mosaic-slider-labels {
   display: flex;
   justify-content: space-between;
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 0.75rem;
   color: var(--mosaic-muted);
 }
 
 .mosaic-slider-value {
-  color: var(--mosaic-highlight);
+  color: var(--mosaic-accent);
+  /* Highlight value with accent */
   font-weight: 600;
 }
 
 .mosaic-hint {
   font-size: 0.8rem;
   color: var(--mosaic-muted);
-  margin: 8px 0 0;
+  margin: 10px 0 0;
+  line-height: 1.4;
 }
 
 /* Preview area with grid overlay */
@@ -385,9 +433,10 @@
   position: relative;
   width: 100%;
   height: 280px;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
-  background: var(--mosaic-surface);
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 @media (min-width: 900px) {
@@ -407,7 +456,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #1a1a2e;
+  background: transparent;
 }
 
 .mosaic-model-viewer {
@@ -427,7 +476,8 @@
 }
 
 .mosaic-grid-cell {
-  border: 1px solid rgba(124, 58, 237, 0.35);
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  /* Very subtle violet grid */
   box-sizing: border-box;
 }
 
@@ -440,5 +490,35 @@
   color: var(--mosaic-muted);
   font-size: 0.9rem;
   border: 2px dashed var(--mosaic-border);
-  border-radius: 4px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Generic Utilities for Inputs and Panels */
+.mosaic-input {
+  width: 100%;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--mosaic-border);
+  border-radius: 8px;
+  color: var(--mosaic-text);
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.mosaic-input:focus {
+  outline: none;
+  border-color: var(--mosaic-accent);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.glass-panel {
+  background: var(--mosaic-tile-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--mosaic-border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
 }

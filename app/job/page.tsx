@@ -141,7 +141,7 @@ function JobPageContent() {
 
     addLog(`Rendering tile ${job.x},${job.y} (${job.width}x${job.height})...`);
     // Pass the task object which now has the correct params
-    const pixelData = await renderer.renderTile(job, task, 500); 
+    const pixelData = await renderer.renderTile(job, task, 500);
 
     let nonZero = 0;
     for (let i = 0; i < pixelData.length; i += 4) {
@@ -168,31 +168,32 @@ function JobPageContent() {
 
 
   return (
-    <main className="min-h-screen job-page p-8 text-white">
+    <main className="min-h-screen job-page p-8">
       <div className="mosaic-back-link mb-8">
         <Link href="/">← Back</Link>
       </div>
-      <div className="job-content max-w-2xl mx-auto">
+      <div className="job-content w-full max-w-6xl mx-auto">
         <h1 className="job-title text-3xl font-bold mb-6">Worker Node</h1>
 
-        <div className="flex gap-4 mb-6">
+        <div className="flex gap-4 mb-6 w-full max-w-2xl">
           <input
             type="text"
             placeholder="Task ID"
-            className="bg-gray-800 p-2 rounded flex-1"
+            className="mosaic-input flex-1"
             value={taskId}
             onChange={e => setTaskId(e.target.value)}
           />
           <button
             onClick={() => startWorker()}
             disabled={status === "running" || status === "initializing"}
-            className={`px-6 py-2 rounded ${status === "running" ? "bg-green-600" : "bg-blue-600 hover:bg-blue-500"}`}
+            className={`job-start-btn ${status === "running" ? "!bg-green-600" : ""}`}
           >
             {status === "running" ? "Running..." : "Start Worker"}
           </button>
         </div>
 
-        <div className="bg-black p-4 rounded h-96 overflow-y-auto font-mono text-sm border border-gray-800">
+        <div className="glass-panel p-4 h-96 overflow-y-auto font-mono text-sm w-full relative">
+          {logs.length === 0 && <div className="absolute inset-0 flex items-center justify-center text-gray-500 opacity-50 pointer-events-none">Waiting to start...</div>}
           {logs.map((log, i) => (
             <div key={i} className="mb-1">{log}</div>
           ))}

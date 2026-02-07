@@ -27,12 +27,12 @@ export default function DesignPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 mb-8 pt-4">
-        <div className="flex gap-4 items-center bg-gray-900 p-4 rounded-lg border border-gray-700">
-          <span className="text-white font-bold">View Existing Task:</span>
+        <div className="flex gap-4 items-center glass-panel p-6">
+          <span className="font-bold text-lg">View Existing Task:</span>
           <input
             type="text"
             placeholder="Enter Task ID"
-            className="bg-black text-white px-3 py-2 rounded border border-gray-600 flex-1"
+            className="mosaic-input flex-1"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 const val = (e.target as HTMLInputElement).value.trim();
@@ -41,7 +41,7 @@ export default function DesignPage() {
             }}
           />
           <button
-            className="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-500"
+            className="job-start-btn"
             onClick={(e) => {
               const input = e.currentTarget.previousElementSibling as HTMLInputElement;
               const val = input.value.trim();
