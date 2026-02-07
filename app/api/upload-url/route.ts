@@ -26,7 +26,10 @@ export async function POST(req: NextRequest) {
             Key: `uploads/${Date.now()}-${filename}`,
             ContentType: contentType,
         });
-
+        console.log(process.env.AWS_REGION);
+        console.log(process.env.AWS_ACCESS_KEY_LOCAL);
+        console.log(process.env.AWS_SECRET_KEY_LOCAL);
+        console.log(process.env.S3_BUCKET_NAME);
         const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });
 
         return NextResponse.json({
