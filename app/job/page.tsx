@@ -6,6 +6,10 @@ import { useSearchParams } from "next/navigation";
 import { WorkerRenderer } from "@/app/components/WorkerRenderer";
 import { Scene } from "@/shaders/Scene";
 
+// if (typeof Float16Array === 'undefined') {
+//   (globalThis as any).Float16Array = Uint16Array;
+// }
+
 function JobPageContent() {
   const searchParams = useSearchParams();
   const [taskId, setTaskId] = useState("");
@@ -136,7 +140,8 @@ function JobPageContent() {
     }
 
     addLog(`Rendering tile ${job.x},${job.y} (${job.width}x${job.height})...`);
-    const pixelData = await renderer.renderTile(job, task, 10); // 10 samples
+    // Pass the task object which now has the correct params
+    const pixelData = await renderer.renderTile(job, task, 50); 
 
     let nonZero = 0;
     for (let i = 0; i < pixelData.length; i += 4) {

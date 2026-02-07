@@ -134,10 +134,14 @@ export default wgsl/* wgsl */ `
     var pixel = raytraceImageBuffer[idx];
 
     if (commonUniforms.frameCounter == 0) {
-      pixel = vec3f(0);
+      pixel = color;
+    }
+    else{
+      let frameCount = f32(commonUniforms.frameCounter);
+      pixel = (pixel * frameCount + color) / (frameCount + 1.0);
     }
 
-    pixel += color;
+    // pixel += color;
     raytraceImageBuffer[idx] = pixel;
 
     rngStateBuffer[idx] = rngState;
