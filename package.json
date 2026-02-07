@@ -25,6 +25,7 @@
     "pg": "^8.18.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-qr-code": "^2.0.18",
     "three": "^0.182.0",
     "webgpu-utils": "^2.0.3",
     "wgsl-preprocessor": "^1.0.1"

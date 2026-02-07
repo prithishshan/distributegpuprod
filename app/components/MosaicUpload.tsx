@@ -181,7 +181,7 @@ export default function MosaicUpload({ onTaskCreated }: MosaicUploadProps) {
         </section>
 
         {/* Grid slider tile */}
-        <section className="mosaic-tile mosaic-tile-slider">
+        {/* <section className="mosaic-tile mosaic-tile-slider">
           <h2 className="mosaic-tile-title">Grid divisions</h2>
           <div className="mosaic-slider-wrap">
             <input
@@ -201,7 +201,7 @@ export default function MosaicUpload({ onTaskCreated }: MosaicUploadProps) {
           <p className="mosaic-hint">
             {gridBoxes * gridBoxes} tiles
           </p>
-        </section>
+        </section> */}
 
         {/* Preview tile — main mosaic panel with grid overlay */}
         <section className="mosaic-tile mosaic-tile-preview">

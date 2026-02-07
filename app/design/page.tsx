@@ -2,8 +2,9 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskPreview from "../components/TaskPreview";
+import QRCode from "react-qr-code";
 
 const MosaicUpload = dynamic(() => import("../components/MosaicUpload"), {
   ssr: false,
@@ -11,6 +12,13 @@ const MosaicUpload = dynamic(() => import("../components/MosaicUpload"), {
 
 export default function DesignPage() {
   const [taskId, setTaskId] = useState<string | null>(null);
+  const [origin, setOrigin] = useState("");
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+
+  const taskUrl = taskId && origin ? `${origin}/job?taskId=${taskId}` : "";
 
   return (
     <main className="min-h-screen design-page-wrap">
@@ -48,7 +56,43 @@ export default function DesignPage() {
       <MosaicUpload onTaskCreated={setTaskId} />
 
       {taskId && (
-        <div className="mt-8 max-w-6xl mx-auto px-4">
+        <div className="mt-8 max-w-6xl mx-auto px-4 space-y-8">
+          <div className="bg-gray-900 p-6 rounded-lg border border-gray-700">
+            <h2 className="text-xl font-bold text-white mb-4">Share Task</h2>
+            <div className="flex flex-col md:flex-row gap-8 items-center">
+              <div className="bg-white p-4 rounded-lg">
+                <QRCode value={taskUrl} size={150} />
+              </div>
+              <div className="flex-1 space-y-4">
+                <div>
+                  <label className="text-gray-400 text-sm block mb-1">Task URL</label>
+                  <div className="flex gap-2">
+                    <input
+                      readOnly
+                      value={taskUrl}
+                      className="bg-black text-white px-3 py-2 rounded border border-gray-600 flex-1 font-mono text-sm"
+                    />
+                    <button
+                      onClick={() => navigator.clipboard.writeText(taskUrl)}
+                      className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <Link
+                    href={`/job?taskId=${taskId}`}
+                    target="_blank"
+                    className="inline-block bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded font-bold"
+                  >
+                    Open Worker Node →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <TaskPreview taskId={taskId} />
         </div>
       )}
