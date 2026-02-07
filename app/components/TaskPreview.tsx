@@ -133,14 +133,14 @@ export default function TaskPreview({ taskId }: TaskPreviewProps) {
     if (!taskId) return null;
 
     return (
-        <div className="task-preview mt-8 p-4 bg-gray-900 rounded-lg border border-gray-700">
-            <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-white">Live Render Preview</h3>
+        <div className="task-preview mt-8 p-6 glass-panel">
+            <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold" style={{ color: 'var(--mosaic-text)' }}>Live Render Preview</h3>
                 <div className="flex items-center gap-3">
-                    <span className="text-xs text-gray-400">Last updated: {lastUpdated.toLocaleTimeString()}</span>
+                    <span className="text-sm" style={{ color: 'var(--mosaic-muted)' }}>Last updated: {lastUpdated.toLocaleTimeString()}</span>
                     <button
                         onClick={handleDownload}
-                        className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-sm transition-colors"
+                        className="bg-[#0071e3] hover:bg-[#0077ed] text-white px-4 py-1.5 rounded-full text-sm font-medium transition-all shadow-sm hover:shadow-md"
                         title="Download Render"
                     >
                         Download
@@ -148,7 +148,7 @@ export default function TaskPreview({ taskId }: TaskPreviewProps) {
                 </div>
             </div>
 
-            <div className="overflow-auto bg-black rounded border border-gray-800 flex justify-center">
+            <div className="overflow-hidden rounded-xl border border-[var(--mosaic-border)] flex justify-center bg-black/5">
                 {taskDims.width > 0 ? (
                     <canvas
                         ref={canvasRef}
@@ -158,12 +158,13 @@ export default function TaskPreview({ taskId }: TaskPreviewProps) {
                         style={{ imageRendering: 'pixelated' }}
                     />
                 ) : (
-                    <div className="p-8 text-gray-500">Waiting for job data...</div>
+                    <div className="p-12 text-[var(--mosaic-muted)]">Waiting for job data...</div>
                 )}
             </div>
-            <div className="mt-2 text-sm text-gray-400">
+            <div className="mt-3 text-sm text-[var(--mosaic-muted)] text-center">
                 Completed: {jobs.filter(j => j.status === 'completed').length} / {jobs.length} tiles
             </div>
         </div>
     );
+
 }

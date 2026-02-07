@@ -1,59 +1,77 @@
-/* Mosaic UI — tiled, geometric layout (Glassmorphism / Light Theme Edition) */
+/* Mosaic UI — tiled, geometric layout (Apple / Glassmorphism Edition) */
 
 /* Landing (entry) page */
 .landing-root {
-  /* Redefine variables for Light + Glass + Subtle Rainbow */
+  /* Redefine variables for Light + Glass */
   --mosaic-bg: transparent;
-  /* Let global rainbow mesh show through */
-  --mosaic-tile-bg: rgba(255, 255, 255, 0.4);
-  /* Glassy white */
-  --mosaic-border: rgba(255, 255, 255, 0.6);
-  /* Subtle white border */
+  /* Let global rainbow mesh show through as a subtle backdrop */
 
-  /* Accent: A vibrant but controlled violet/indigo gradient */
-  --mosaic-accent: #8b5cf6;
-  --mosaic-text: #0f172a;
-  /* Slate 900 */
-  --mosaic-muted: #64748b;
-  /* Slate 500 */
-  --mosaic-highlight: #a78bfa;
-  /* Lighter violet */
+  /* Apple-style Glass Materials */
+  --mosaic-tile-bg: rgba(255, 255, 255, 0.65);
+  /* High opacity for readability */
+  --mosaic-border: rgba(255, 255, 255, 0.4);
+
+  /* Accent: Apple Blue */
+  --mosaic-accent: #0071e3;
+  --mosaic-text: #1d1d1f;
+  /* SF Black */
+  --mosaic-muted: #86868b;
+  /* SF Grey */
+  --mosaic-highlight: #0077ed;
 
   min-height: 100vh;
   background: var(--mosaic-bg);
   color: var(--mosaic-text);
   padding: clamp(24px, 5vw, 48px);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  -webkit-font-smoothing: antialiased;
 }
 
 .landing-title {
-  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 8px;
-  /* Rainbow gradient text for title */
+  letter-spacing: -0.015em;
+  margin: 0 0 12px;
   background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-align: center;
+}
+
+.mosaic-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .landing-subtitle {
-  margin: 0 0 32px;
-  font-size: 1rem;
+  margin: 0 0 48px;
+  font-size: 1.25rem;
   color: var(--mosaic-muted);
+  font-weight: 400;
+  text-align: center;
+  max-width: 600px;
+  line-height: 1.4;
 }
 
 .landing-nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 24px;
   justify-content: center;
-  max-width: 560px;
+  max-width: 800px;
 }
 
 .landing-card {
@@ -61,90 +79,97 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 200px;
-  min-height: 140px;
-  padding: 28px 32px;
+  min-width: 240px;
+  min-height: 180px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
 
-  /* Glassmorphism */
+  /* Enhanced Apple Glassmorphism */
   background: var(--mosaic-tile-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   border: 1px solid var(--mosaic-border);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05);
 
-  border-radius: 12px;
+  border-radius: 20px;
+  /* More rounded */
   text-decoration: none;
   color: var(--mosaic-text);
-  transition: all 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
 }
 
+
+
 .landing-card:hover {
-  border-color: var(--mosaic-accent);
-  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.15), 0 4px 6px -2px rgba(139, 92, 246, 0.1);
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.6);
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  border-color: rgba(255, 255, 255, 0.8);
+  /* background: rgba(255, 255, 255, 0.85); */
 }
 
 .landing-card-label {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 600;
-  color: var(--mosaic-accent);
+  color: var(--mosaic-text);
   margin-bottom: 8px;
 }
 
 .landing-card-desc {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--mosaic-muted);
   text-align: center;
 }
 
-/* Back link (design + job pages) — uses vars from :root below */
+/* Back link (design + job pages) */
 .mosaic-back-link {
-  --mosaic-muted: #64748b;
-  --mosaic-highlight: #8b5cf6;
+  --mosaic-muted: #86868b;
+  --mosaic-highlight: #0071e3;
   position: fixed;
-  top: 16px;
-  left: 16px;
-  z-index: 10;
+  top: 20px;
+  left: 20px;
+  z-index: 50;
 }
 
 .mosaic-back-link a {
   color: var(--mosaic-muted);
   text-decoration: none;
   font-size: 0.9rem;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(4px);
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  transition: all 0.2s;
+  font-weight: 500;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-radius: 980px;
+  /* Pill shape */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .mosaic-back-link a:hover {
   color: var(--mosaic-highlight);
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
 }
 
 /* Design page wrapper */
 .design-page-wrap {
   background: transparent;
-  /* Allow global bg */
 }
 
 /* Job page */
 .job-page {
-  /* Copy vars from landing root for consistency */
+  /* Copy vars from landing root */
   --mosaic-bg: transparent;
-  --mosaic-tile-bg: rgba(255, 255, 255, 0.4);
-  --mosaic-border: rgba(255, 255, 255, 0.6);
-  --mosaic-accent: #8b5cf6;
-  --mosaic-text: #0f172a;
-  --mosaic-muted: #64748b;
-  --mosaic-highlight: #a78bfa;
+  --mosaic-tile-bg: rgba(255, 255, 255, 0.65);
+  --mosaic-border: rgba(255, 255, 255, 0.4);
+  --mosaic-accent: #0071e3;
+  --mosaic-text: #1d1d1f;
+  --mosaic-muted: #86868b;
 
   background: var(--mosaic-bg);
   color: var(--mosaic-text);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 24px;
 }
 
@@ -158,29 +183,32 @@
 }
 
 .job-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 24px;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 32px;
   color: var(--mosaic-text);
+  letter-spacing: -0.01em;
 }
 
 .job-start-btn {
-  padding: 12px 28px;
+  padding: 10px 24px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   color: white;
-  background: linear-gradient(135deg, #8b5cf6, #ec4899);
-  /* Gradient button */
+  background: #0071e3;
+  /* Apple Blue */
   border: none;
-  border-radius: 8px;
+  border-radius: 980px;
+  /* Pill */
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
-  box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.3);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 113, 227, 0.15);
 }
 
 .job-start-btn:hover {
-  opacity: 0.9;
-  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
+  background: #0077ed;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 113, 227, 0.25);
 }
 
 .job-start-btn:active {
@@ -190,36 +218,34 @@
 .mosaic-root {
   --mosaic-bg: transparent;
   --mosaic-surface: rgba(255, 255, 255, 0.5);
-  /* Semi-transparent surface */
-  --mosaic-tile-bg: rgba(255, 255, 255, 0.4);
-  --mosaic-border: rgba(255, 255, 255, 0.6);
-  --mosaic-accent: #8b5cf6;
-  --mosaic-accent-dim: #7c3aed;
-  --mosaic-text: #0f172a;
-  --mosaic-muted: #64748b;
-  --mosaic-highlight: #a78bfa;
+  --mosaic-tile-bg: rgba(255, 255, 255, 0.65);
+  --mosaic-border: rgba(255, 255, 255, 0.4);
+  --mosaic-accent: #0071e3;
+  --mosaic-accent-dim: #0077ed;
+  --mosaic-text: #1d1d1f;
+  --mosaic-muted: #86868b;
+  --mosaic-highlight: #0071e3;
 
   min-height: 100vh;
   background: var(--mosaic-bg);
   color: var(--mosaic-text);
-  padding: clamp(12px, 3vw, 24px);
-  font-family: system-ui, -apple-system, sans-serif;
+  padding: clamp(16px, 4vw, 32px);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .mosaic-grid-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: auto auto 1fr;
-  gap: 16px;
-  /* Increased gap slightly for glass look */
+  gap: 20px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 @media (min-width: 900px) {
   .mosaic-grid-layout {
-    grid-template-columns: 280px 1fr;
-    grid-template-rows: auto minmax(180px, 1fr) minmax(180px, 1fr);
+    grid-template-columns: 320px 1fr;
+    grid-template-rows: auto minmax(200px, 1fr) minmax(200px, 1fr);
   }
 
   .mosaic-tile-inputs {
@@ -228,87 +254,71 @@
 
   .mosaic-tile-slider {
     grid-row: 3;
+    /* Hidden in component */
   }
 
   .mosaic-tile-preview {
     grid-row: 2 / 4;
-    min-height: 400px;
+    min-height: 500px;
   }
 }
 
 .mosaic-tile {
   background: var(--mosaic-tile-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
   border: 1px solid var(--mosaic-border);
-  border-radius: 12px;
-  /* Softer corners */
-  padding: 20px;
+  border-radius: 20px;
+  padding: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.04);
 }
 
-.mosaic-tile::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg,
-      transparent,
-      var(--mosaic-accent),
-      #ec4899,
-      transparent);
-  opacity: 0.8;
-}
+/* Removed the rainbow accent line on tiles for cleaner look */
+/* .mosaic-tile::before {} */
 
 .mosaic-tile-header {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 24px 16px;
+  padding: 32px 16px;
   background: transparent;
   backdrop-filter: none;
   border: none;
   box-shadow: none;
 }
 
-@media (min-width: 900px) {
-  .mosaic-tile-header {
-    grid-column: 1 / -1;
-  }
-}
-
 .mosaic-title {
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   margin: 0;
   background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .mosaic-subtitle {
-  margin: 6px 0 0;
-  font-size: 0.9rem;
+  margin: 8px 0 0;
+  font-size: 1.1rem;
   color: var(--mosaic-muted);
-  letter-spacing: 0.2em;
+  letter-spacing: 0;
+  font-weight: 400;
 }
 
 .mosaic-tile-title {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.05em;
   color: var(--mosaic-muted);
-  margin: 0 0 16px;
+  margin: 0 0 20px;
   font-weight: 600;
 }
 
 .mosaic-input-group {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .mosaic-input-group:last-child {
@@ -317,17 +327,15 @@
 
 .mosaic-label {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
   gap: 8px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .mosaic-label span:first-child {
-  min-width: 56px;
-  color: var(--mosaic-accent);
-  font-weight: 600;
+  color: var(--mosaic-text);
+  font-weight: 500;
 }
 
 .mosaic-file-input {
@@ -340,27 +348,33 @@
 }
 
 .mosaic-file-name {
-  padding: 8px 12px;
+  padding: 12px 16px;
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid var(--mosaic-border);
-  border-radius: 6px;
+  border-radius: 12px;
   color: var(--mosaic-text);
-  font-size: 0.85rem;
-  flex: 1;
-  min-width: 0;
-  transition: border-color 0.2s;
+  font-size: 0.95rem;
+  transition: all 0.2s;
 }
 
 .mosaic-label:has(.mosaic-file-input:focus)+.mosaic-file-name,
 .mosaic-file-input:focus+.mosaic-file-name {
   border-color: var(--mosaic-accent);
   outline: none;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.2);
 }
 
-.mosaic-optional .mosaic-label span:first-child {
-  color: var(--mosaic-muted);
+.glass-panel {
+  background: var(--mosaic-tile-bg);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid var(--mosaic-border);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
 }
+
+/* Slider and Preview styles largely similar but updated vars */
 
 .mosaic-slider-wrap {
   padding: 8px 0;
@@ -368,81 +382,39 @@
 
 .mosaic-slider {
   width: 100%;
-  height: 6px;
+  height: 4px;
   -webkit-appearance: none;
   appearance: none;
   background: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
+  border-radius: 2px;
   outline: none;
 }
 
 .mosaic-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: var(--mosaic-accent);
+  background: white;
   cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.mosaic-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--mosaic-accent);
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.mosaic-slider-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-  font-size: 0.75rem;
-  color: var(--mosaic-muted);
-}
-
-.mosaic-slider-value {
-  color: var(--mosaic-accent);
-  /* Highlight value with accent */
-  font-weight: 600;
-}
-
-.mosaic-hint {
-  font-size: 0.8rem;
-  color: var(--mosaic-muted);
-  margin: 10px 0 0;
-  line-height: 1.4;
-}
-
-/* Preview area with grid overlay */
-.mosaic-tile-preview {
-  min-height: 320px;
-}
-
-@media (min-width: 900px) {
-  .mosaic-tile-preview {
-    min-height: 420px;
-  }
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .mosaic-preview-wrap {
   position: relative;
   width: 100%;
-  height: 280px;
-  border-radius: 8px;
+  height: 320px;
+  border-radius: 16px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 @media (min-width: 900px) {
   .mosaic-preview-wrap {
     height: 100%;
-    min-height: 340px;
+    min-height: 400px;
   }
 }
 
@@ -456,7 +428,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: transparent;
 }
 
 .mosaic-model-viewer {
@@ -476,10 +447,10 @@
 }
 
 .mosaic-grid-cell {
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  /* Very subtle violet grid */
-  box-sizing: border-box;
+  border: 1px solid rgba(0, 113, 227, 0.1);
 }
+
+/* Subtle blue grid */
 
 .mosaic-preview-placeholder {
   position: absolute;
@@ -488,37 +459,27 @@
   align-items: center;
   justify-content: center;
   color: var(--mosaic-muted);
-  font-size: 0.9rem;
-  border: 2px dashed var(--mosaic-border);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
+  font-size: 0.95rem;
+  border: 2px dashed rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.3);
 }
 
-/* Generic Utilities for Inputs and Panels */
 .mosaic-input {
   width: 100%;
-  padding: 10px 16px;
+  padding: 12px 16px;
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid var(--mosaic-border);
-  border-radius: 8px;
+  border-radius: 12px;
   color: var(--mosaic-text);
-  font-size: 0.95rem;
+  font-size: 1rem;
   transition: all 0.2s;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(10px);
 }
 
 .mosaic-input:focus {
   outline: none;
   border-color: var(--mosaic-accent);
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-}
-
-.glass-panel {
-  background: var(--mosaic-tile-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--mosaic-border);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15);
 }

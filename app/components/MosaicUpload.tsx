@@ -132,7 +132,7 @@ export default function MosaicUpload({ onTaskCreated }: MosaicUploadProps) {
       <div className="mosaic-grid-layout">
         {/* Header tile */}
         <header className="mosaic-tile mosaic-tile-header">
-          <h1 className="mosaic-title">Distributed GPU</h1>
+          <h1 className="mosaic-title">Mosaic GPU</h1>
           <p className="mosaic-subtitle">Create a Rendering Task</p>
         </header>
 

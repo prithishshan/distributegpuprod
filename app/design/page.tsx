@@ -57,24 +57,24 @@ export default function DesignPage() {
 
       {taskId && (
         <div className="mt-8 max-w-6xl mx-auto px-4 space-y-8">
-          <div className="bg-gray-900 p-6 rounded-lg border border-gray-700">
-            <h2 className="text-xl font-bold text-white mb-4">Share Task</h2>
+          <div className="p-6 glass-panel">
+            <h2 className="text-xl font-bold mb-6" style={{ color: 'var(--mosaic-text)' }}>Share Task</h2>
             <div className="flex flex-col md:flex-row gap-8 items-center">
-              <div className="bg-white p-4 rounded-lg">
+              <div className="bg-white p-4 rounded-xl border border-[var(--mosaic-border)] shadow-sm">
                 <QRCode value={taskUrl} size={150} />
               </div>
-              <div className="flex-1 space-y-4">
+              <div className="flex-1 space-y-6">
                 <div>
-                  <label className="text-gray-400 text-sm block mb-1">Task URL</label>
-                  <div className="flex gap-2">
+                  <label className="text-sm block mb-2 font-medium" style={{ color: 'var(--mosaic-muted)' }}>Task URL</label>
+                  <div className="flex gap-3">
                     <input
                       readOnly
                       value={taskUrl}
-                      className="bg-black text-white px-3 py-2 rounded border border-gray-600 flex-1 font-mono text-sm"
+                      className="mosaic-input flex-1 font-mono text-sm !py-2.5"
                     />
                     <button
                       onClick={() => navigator.clipboard.writeText(taskUrl)}
-                      className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded"
+                      className="bg-[#0071e3] hover:bg-[#0077ed] text-white px-5 py-2 rounded-full font-medium transition-all shadow-sm hover:shadow-md"
                     >
                       Copy
                     </button>
@@ -84,7 +84,7 @@ export default function DesignPage() {
                   <Link
                     href={`/job?taskId=${taskId}`}
                     target="_blank"
-                    className="inline-block bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded font-bold"
+                    className="inline-block bg-[#0071e3] hover:bg-[#0077ed] text-white px-6 py-2.5 rounded-full font-medium transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
                   >
                     Open Worker Node →
                   </Link>

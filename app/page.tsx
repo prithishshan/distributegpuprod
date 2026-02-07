@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="landing-root">
-      <h1 className="landing-title">Distributed GPU</h1>
+      <h1 className="landing-title">Mosaic GPU</h1>
       <p className="landing-subtitle">Choose an option</p>
       <nav className="landing-nav">
         <Link href="/design" className="landing-card landing-card-design">
