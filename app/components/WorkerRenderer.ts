@@ -118,7 +118,7 @@ export class WorkerRenderer {
             cam_target_x: number, cam_target_y: number, cam_target_z: number,
             fov: number, width: number, height: number, max_bounces: number
         },
-        samples: number = 50
+        samples: number = 500
     ): Promise<Uint8Array> {
 
         const tileW = job.width;

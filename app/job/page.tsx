@@ -141,7 +141,7 @@ function JobPageContent() {
 
     addLog(`Rendering tile ${job.x},${job.y} (${job.width}x${job.height})...`);
     // Pass the task object which now has the correct params
-    const pixelData = await renderer.renderTile(job, task, 50); 
+    const pixelData = await renderer.renderTile(job, task, 500); 
 
     let nonZero = 0;
     for (let i = 0; i < pixelData.length; i += 4) {
