@@ -13,11 +13,16 @@ export async function POST(req: NextRequest) {
         try {
             // Update job status to 'started'
             const query = `
+        WITH job_to_lock AS (
+          SELECT id FROM jobs
+          WHERE id = $2 AND status = 'created'
+          FOR UPDATE NOWAIT
+        )
         UPDATE jobs
         SET status = 'started',
             assigned_worker_id = $1,
             started_at = NOW()
-        WHERE id = $2
+        WHERE id IN (SELECT id FROM job_to_lock)
         RETURNING *
       `;
             const result = await client.query(query, [workerId || 'unknown-worker', jobId]);
